@@ -1,3 +1,5 @@
 export const TOURNAMENTS_GET_REQUEST = 'tournaments/getRequest'
 export const TOURNAMENTS_GET_SUCCESS = 'tournaments/getSuccess'
 export const TOURNAMENTS_GET_FAILURE = 'tournaments/getFailure'
+export const TOURNAMENTS_PATCH_SUCCESS = 'tournaments/patchSuccess'
+export const TOURNAMENTS_PATCH_FAILURE = 'tournaments/patchFailure'

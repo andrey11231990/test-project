@@ -19,3 +19,22 @@ export const getTournaments = async (
 
     return await response.json();
 };
+
+export const patchTournament = async (name: string, id: string): Promise<Tournament> => {
+    const response = await fetch(
+        `API_TOURNAMENTS_URL/${id}`,
+        {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name }),
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error('Something went wrong.');
+    }
+
+    return await response.json();
+};

@@ -1,12 +1,24 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Tournament } from '../../../api/tournament.types';
+import { useAppDispatch } from '../../../store/hooks';
+import {
+    tournamentPatch
+} from '../../../actions/tournaments'
+import { isTournamentNameValid } from '../../../utils/validators';
 import H6 from '../../../components/H6';
 import Button from '../../../components/Button';
 import theme from '../../../theme';
 
-export const Card = ({ game, name, organizer, participants, startDate }: Tournament) => {
-    const handleEdit = () => { }
+export const Card = ({ id, game, name, organizer, participants, startDate }: Tournament) => {
+    const dispatch = useAppDispatch();
+
+    const handleEdit = () => {
+        const newTournamentName = window.prompt('Tournament Name:', '');
+        if (newTournamentName && isTournamentNameValid(newTournamentName)) {
+            dispatch(tournamentPatch(id, newTournamentName))
+        }
+    }
     const handleDelete = () => { }
 
     return (
