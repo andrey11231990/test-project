@@ -1,7 +1,20 @@
 import { AnyAction } from "redux";
 import { Tournament } from "../api/tournament.types"
-import { TOURNAMENTS_GET_REQUEST, TOURNAMENTS_GET_FAILURE, TOURNAMENTS_GET_SUCCESS, TOURNAMENTS_PATCH_FAILURE, TOURNAMENTS_PATCH_SUCCESS } from '../constants/action-names';
-import { TournamentGetSuccessAction, TournamentPatchSuccessAction, StateArrayValue } from './tournaments.types'
+import {
+  TOURNAMENTS_GET_REQUEST,
+  TOURNAMENTS_GET_FAILURE,
+  TOURNAMENTS_GET_SUCCESS,
+  TOURNAMENTS_PATCH_FAILURE,
+  TOURNAMENTS_PATCH_SUCCESS,
+  TOURNAMENTS_DELETE_FAILURE,
+  TOURNAMENTS_DELETE_SUCCESS
+} from '../constants/action-names';
+import {
+  TournamentGetSuccessAction,
+  TournamentPatchSuccessAction,
+  TournamentDeleteSuccessAction,
+  StateArrayValue
+} from './tournaments.types'
 
 const initialState: StateArrayValue<Tournament> = {
   loading: false,
@@ -42,8 +55,16 @@ export default function tournaments(
         }),
         error: ''
       }
+    case TOURNAMENTS_DELETE_SUCCESS:
+      const id = (action as TournamentDeleteSuccessAction).payload.id
+      return {
+        loading: false,
+        data: state.data.filter(tournament => tournament.id !== id),
+        error: ''
+      }
     case TOURNAMENTS_GET_FAILURE:
     case TOURNAMENTS_PATCH_FAILURE:
+    case TOURNAMENTS_DELETE_FAILURE:
       return {
         loading: false,
         data: [],

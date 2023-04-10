@@ -56,7 +56,7 @@ export const TournamentsView = () => {
                 <Button onClick={handleRetry}>Retry</Button>
             </Centered>}
             {data && data.length === 0 && !error && !isLoading && <Centered>No tournaments found.</Centered>}
-            {data && data.length > 0 && <Grid>{data.map((tournament) => <Card {...tournament} />)}</Grid>}
+            {data && data.length > 0 && <Grid>{data.map((tournament) => <Card key={tournament.id} {...tournament} />)}</Grid>}
         </Container>
     )
 }

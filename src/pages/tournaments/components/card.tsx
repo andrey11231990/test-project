@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Tournament } from '../../../api/tournament.types';
 import { useAppDispatch } from '../../../store/hooks';
 import {
-    tournamentPatch
+    tournamentPatch, tournamentDelete
 } from '../../../actions/tournaments'
 import { isTournamentNameValid } from '../../../utils/validators';
 import H6 from '../../../components/H6';
@@ -19,7 +19,12 @@ export const Card = ({ id, game, name, organizer, participants, startDate }: Tou
             dispatch(tournamentPatch(id, newTournamentName))
         }
     }
-    const handleDelete = () => { }
+    const handleDelete = () => {
+        const isConfirmed = window.confirm('Do you really want to delete this tournament?');
+        if (isConfirmed) {
+            dispatch(tournamentDelete(id))
+        }
+    }
 
     return (
         <StyledCard>
