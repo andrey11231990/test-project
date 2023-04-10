@@ -61,14 +61,14 @@ export const tournamentDeleteFailure = (): TournamentDeleteFailureAction => ({
     type: TOURNAMENTS_DELETE_FAILURE,
 })
 
-export function tournamentGet(): ThunkAction<void, RootState, unknown, Action> {
+export function tournamentGet(name?: string): ThunkAction<void, RootState, unknown, Action> {
     return async function tournamentGetThunk(
         dispatch: Dispatch
     ) {
         dispatch(tournamentGetRequest());
 
         try {
-            const tournaments = await getTournaments()
+            const tournaments = await getTournaments(name)
             dispatch(tournamentGetSuccess(tournaments))
         } catch (e) {
             dispatch(tournamentGetFailure())

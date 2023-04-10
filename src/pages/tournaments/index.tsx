@@ -26,15 +26,21 @@ export const TournamentsView = () => {
     const [search, setSearch] = React.useState('');
 
     useEffect(() => {
-        dispatch(tournamentGet())
-    }, [])
+        // debounce for search
+        let timeout: NodeJS.Timeout = setTimeout(() => {
+            dispatch(tournamentGet(search));
+        }, 750);
+        return () => {
+            clearTimeout(timeout);
+        };
+    }, [dispatch, search]);
 
     const handleCreate = () => {
         const newTournamentName = window.prompt('Tournament Name:', '');
     };
 
     const handleRetry = () => {
-        dispatch(tournamentGet())
+        dispatch(tournamentGet(search))
     };
 
     return (

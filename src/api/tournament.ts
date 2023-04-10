@@ -2,9 +2,13 @@ import { API_TOURNAMENTS_URL } from '../constants/api';
 import { Tournament } from "../api/tournament.types"
 
 export const getTournaments = async (
+    name?: string
 ): Promise<Tournament[]> => {
     const response = await fetch(
-        API_TOURNAMENTS_URL,
+        API_TOURNAMENTS_URL + '?' +
+        new URLSearchParams({
+            ...(name ? { q: name } : {}),
+        }),
         {
             method: 'GET',
             headers: {
