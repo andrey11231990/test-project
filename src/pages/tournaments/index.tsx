@@ -7,17 +7,15 @@ import {
     selectTournamentIsLoading,
 } from '../../selectors/tournaments';
 import {
-    tournamentGet, tournamentPost
-} from '../../actions/tournaments'
+    tournamentGet
+} from '../../actions/tournaments.thunk'
 import Container from '../../components/Container';
 import H4 from '../../components/H4';
-import Input from '../../components/Input';
-import Button from '../../components/Button';
-import Header from './components/Header';
+import { Header } from './components/Header';
 import Centered from '../../components/Centered';
-import { Card } from './components/card';
+import { Card } from './components/Card';
+import { ErrorView } from './components/ErrorView';
 import theme from '../../theme';
-import { isTournamentNameValid } from '../../utils/validators';
 
 export const TournamentsView = () => {
     const dispatch = useAppDispatch();
@@ -38,35 +36,12 @@ export const TournamentsView = () => {
         };
     }, [dispatch, search, setIsRequestTriggered]);
 
-    const handleCreate = () => {
-        const newTournamentName = window.prompt('Tournament Name:', '');
-        if (newTournamentName && isTournamentNameValid(newTournamentName)) {
-            dispatch(tournamentPost(newTournamentName))
-        }
-    };
-
-    const handleRetry = () => {
-        dispatch(tournamentGet(search))
-    };
-
     return (
         <Container>
             <H4>FACEIT Tournaments</H4>
-            <Header>
-                <Input
-                    id="name"
-                    name="name"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    placeholder="Search tournaments..."
-                />
-                <Button onClick={handleCreate}>Create tournament</Button>
-            </Header>
+            <Header search={search} setSearch={setSearch} />
             {isLoading && <Centered>Loading tournaments ...</Centered>}
-            {error && <Centered column>
-                <div>{error}</div>
-                <Button onClick={handleRetry}>Retry</Button>
-            </Centered>}
+            {error && <ErrorView search={search} error={error} />}
             {isRequestTriggered && data && data.length === 0 && !error && !isLoading && <Centered>No tournaments found.</Centered>}
             {data && data.length > 0 && <Grid>{data.map((tournament) => <Card key={tournament.id} {...tournament} />)}</Grid>}
         </Container>

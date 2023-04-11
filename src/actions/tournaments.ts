@@ -1,8 +1,4 @@
-import { ThunkAction } from 'redux-thunk';
-import { Dispatch } from 'redux'
-import { RootState } from '../reducers';
 import { Tournament } from "../api/tournament.types"
-import { getTournaments, postTournament, deleteTournament } from '../api/tournament'
 import {
     TOURNAMENTS_GET_REQUEST,
     TOURNAMENTS_GET_FAILURE,
@@ -23,8 +19,7 @@ import {
     TournamentPostFailureAction,
     TournamentPostSuccessAction,
     TournamentDeleteFailureAction,
-    TournamentDeleteSuccessAction,
-    Action
+    TournamentDeleteSuccessAction
 } from '../reducers/tournaments.types'
 
 export const tournamentGetRequest = (): TournamentGetAction => ({
@@ -75,67 +70,3 @@ export const tournamentDeleteSuccess = (id: string): TournamentDeleteSuccessActi
 export const tournamentDeleteFailure = (): TournamentDeleteFailureAction => ({
     type: TOURNAMENTS_DELETE_FAILURE,
 })
-
-export function tournamentGet(name?: string): ThunkAction<void, RootState, unknown, Action> {
-    return async function tournamentGetThunk(
-        dispatch: Dispatch
-    ) {
-        dispatch(tournamentGetRequest());
-
-        try {
-            const tournaments = await getTournaments(name)
-            dispatch(tournamentGetSuccess(tournaments))
-        } catch (e) {
-            dispatch(tournamentGetFailure())
-        }
-    };
-}
-
-export function tournamentPatch(
-    id: string,
-    newTournamentName: string
-): ThunkAction<void, RootState, unknown, Action> {
-    return async function tournamentPatchThunk(
-        dispatch: Dispatch
-    ) {
-        try {
-            dispatch(tournamentPatchSuccess(id, newTournamentName))
-            // as I understood I shouldn't make a request to BE and update
-            // the state afterwards. So, the BE call is commented out
-            // const tournament = await patchTournament(id, newTournamentName)
-        } catch (e) {
-            dispatch(tournamentPatchFailure())
-        }
-    };
-}
-
-export function tournamentPost(
-    newTournamentName: string
-): ThunkAction<void, RootState, unknown, Action> {
-    return async function tournamentPostThunk(
-        dispatch: Dispatch
-    ) {
-        // do not trigger loading state according to the task description
-        try {
-            const tournament = await postTournament(newTournamentName)
-            dispatch(tournamentPostSuccess(tournament))
-        } catch (e) {
-            dispatch(tournamentPostFailure())
-        }
-    };
-}
-
-export function tournamentDelete(
-    id: string
-): ThunkAction<void, RootState, unknown, Action> {
-    return async function tournamentDeleteThunk(
-        dispatch: Dispatch
-    ) {
-        try {
-            dispatch(tournamentDeleteSuccess(id))
-            await deleteTournament(id)
-        } catch (e) {
-            dispatch(tournamentDeleteFailure())
-        }
-    };
-}

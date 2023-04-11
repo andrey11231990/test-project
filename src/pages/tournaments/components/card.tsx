@@ -4,7 +4,7 @@ import { Tournament } from '../../../api/tournament.types';
 import { useAppDispatch } from '../../../store/hooks';
 import {
     tournamentPatch, tournamentDelete
-} from '../../../actions/tournaments'
+} from '../../../actions/tournaments.thunk'
 import { isTournamentNameValid } from '../../../utils/validators';
 import H6 from '../../../components/H6';
 import Button from '../../../components/Button';
