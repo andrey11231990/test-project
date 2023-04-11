@@ -6,12 +6,15 @@ import {
   TOURNAMENTS_GET_SUCCESS,
   TOURNAMENTS_PATCH_FAILURE,
   TOURNAMENTS_PATCH_SUCCESS,
+  TOURNAMENTS_POST_FAILURE,
+  TOURNAMENTS_POST_SUCCESS,
   TOURNAMENTS_DELETE_FAILURE,
   TOURNAMENTS_DELETE_SUCCESS
 } from '../constants/action-names';
 import {
   TournamentGetSuccessAction,
   TournamentPatchSuccessAction,
+  TournamentPostSuccessAction,
   TournamentDeleteSuccessAction,
   StateArrayValue
 } from './tournaments.types'
@@ -39,6 +42,12 @@ export default function tournaments(
         data: (action as TournamentGetSuccessAction).payload.data,
         error: ''
       }
+    case TOURNAMENTS_POST_SUCCESS:
+      return {
+        loading: false,
+        data: [(action as TournamentPostSuccessAction).payload.data, ...state.data],
+        error: ''
+      }
     case TOURNAMENTS_PATCH_SUCCESS:
       return {
         loading: false,
@@ -64,6 +73,7 @@ export default function tournaments(
       }
     case TOURNAMENTS_GET_FAILURE:
     case TOURNAMENTS_PATCH_FAILURE:
+    case TOURNAMENTS_POST_FAILURE:
     case TOURNAMENTS_DELETE_FAILURE:
       return {
         loading: false,

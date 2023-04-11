@@ -6,12 +6,14 @@ export interface TournamentGetSuccessAction extends BaseAction { payload: { data
 export interface TournamentGetFailureAction extends BaseAction { }
 export interface TournamentPatchSuccessAction extends BaseAction { payload: { id: string, name: string } }
 export interface TournamentPatchFailureAction extends BaseAction { }
+export interface TournamentPostSuccessAction extends BaseAction { payload: { data: Tournament } }
+export interface TournamentPostFailureAction extends BaseAction { }
 export interface TournamentDeleteSuccessAction extends BaseAction { payload: { id: string } }
 export interface TournamentDeleteFailureAction extends BaseAction { }
 
 export type Action = TournamentGetAction | TournamentGetSuccessAction | TournamentGetFailureAction
     | TournamentPatchSuccessAction | TournamentPatchFailureAction | TournamentDeleteSuccessAction
-    | TournamentDeleteFailureAction
+    | TournamentDeleteFailureAction | TournamentPostFailureAction | TournamentPostSuccessAction
 
 export interface StateArrayValue<T> {
     loading: boolean,

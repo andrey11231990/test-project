@@ -7,7 +7,7 @@ import {
     selectTournamentIsLoading,
 } from '../../selectors/tournaments';
 import {
-    tournamentGet
+    tournamentGet, tournamentPost
 } from '../../actions/tournaments'
 import Container from '../../components/Container';
 import H4 from '../../components/H4';
@@ -17,6 +17,7 @@ import Header from './components/Header';
 import Centered from '../../components/Centered';
 import { Card } from './components/card';
 import theme from '../../theme';
+import { isTournamentNameValid } from '../../utils/validators';
 
 export const TournamentsView = () => {
     const dispatch = useAppDispatch();
@@ -24,19 +25,24 @@ export const TournamentsView = () => {
     const isLoading = useAppSelector(selectTournamentIsLoading);
     const error = useAppSelector(selectTournamentError);
     const [search, setSearch] = React.useState('');
+    const [isRequestTriggered, setIsRequestTriggered] = React.useState(false);
 
     useEffect(() => {
         // debounce for search
         let timeout: NodeJS.Timeout = setTimeout(() => {
             dispatch(tournamentGet(search));
+            setIsRequestTriggered(true)
         }, 750);
         return () => {
             clearTimeout(timeout);
         };
-    }, [dispatch, search]);
+    }, [dispatch, search, setIsRequestTriggered]);
 
     const handleCreate = () => {
         const newTournamentName = window.prompt('Tournament Name:', '');
+        if (newTournamentName && isTournamentNameValid(newTournamentName)) {
+            dispatch(tournamentPost(newTournamentName))
+        }
     };
 
     const handleRetry = () => {
@@ -61,7 +67,7 @@ export const TournamentsView = () => {
                 <div>{error}</div>
                 <Button onClick={handleRetry}>Retry</Button>
             </Centered>}
-            {data && data.length === 0 && !error && !isLoading && <Centered>No tournaments found.</Centered>}
+            {isRequestTriggered && data && data.length === 0 && !error && !isLoading && <Centered>No tournaments found.</Centered>}
             {data && data.length > 0 && <Grid>{data.map((tournament) => <Card key={tournament.id} {...tournament} />)}</Grid>}
         </Container>
     )

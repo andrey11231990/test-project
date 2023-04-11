@@ -43,6 +43,25 @@ export const patchTournament = async (id: string, name: string): Promise<Tournam
     return await response.json();
 };
 
+export const postTournament = async (name: string): Promise<Tournament> => {
+    const response = await fetch(
+        API_TOURNAMENTS_URL,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name }),
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error('Something went wrong.');
+    }
+
+    return await response.json();
+};
+
 export const deleteTournament = async (id: string): Promise<void> => {
     const response = await fetch(
         `${API_TOURNAMENTS_URL}/${id}`,

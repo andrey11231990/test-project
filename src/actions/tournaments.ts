@@ -2,13 +2,15 @@ import { ThunkAction } from 'redux-thunk';
 import { Dispatch } from 'redux'
 import { RootState } from '../reducers';
 import { Tournament } from "../api/tournament.types"
-import { getTournaments, deleteTournament } from '../api/tournament'
+import { getTournaments, postTournament, deleteTournament } from '../api/tournament'
 import {
     TOURNAMENTS_GET_REQUEST,
     TOURNAMENTS_GET_FAILURE,
     TOURNAMENTS_GET_SUCCESS,
     TOURNAMENTS_PATCH_FAILURE,
     TOURNAMENTS_PATCH_SUCCESS,
+    TOURNAMENTS_POST_FAILURE,
+    TOURNAMENTS_POST_SUCCESS,
     TOURNAMENTS_DELETE_FAILURE,
     TOURNAMENTS_DELETE_SUCCESS
 } from '../constants/action-names';
@@ -18,6 +20,8 @@ import {
     TournamentGetFailureAction,
     TournamentPatchFailureAction,
     TournamentPatchSuccessAction,
+    TournamentPostFailureAction,
+    TournamentPostSuccessAction,
     TournamentDeleteFailureAction,
     TournamentDeleteSuccessAction,
     Action
@@ -48,6 +52,17 @@ export const tournamentPatchSuccess = (id: string, name: string): TournamentPatc
 
 export const tournamentPatchFailure = (): TournamentPatchFailureAction => ({
     type: TOURNAMENTS_PATCH_FAILURE,
+})
+
+export const tournamentPostFailure = (): TournamentPostFailureAction => ({
+    type: TOURNAMENTS_POST_FAILURE,
+})
+
+export const tournamentPostSuccess = (data: Tournament): TournamentPostSuccessAction => ({
+    type: TOURNAMENTS_POST_SUCCESS,
+    payload: {
+        data
+    }
 })
 
 export const tournamentDeleteSuccess = (id: string): TournamentDeleteSuccessAction => ({
@@ -90,6 +105,22 @@ export function tournamentPatch(
             // const tournament = await patchTournament(id, newTournamentName)
         } catch (e) {
             dispatch(tournamentPatchFailure())
+        }
+    };
+}
+
+export function tournamentPost(
+    newTournamentName: string
+): ThunkAction<void, RootState, unknown, Action> {
+    return async function tournamentPostThunk(
+        dispatch: Dispatch
+    ) {
+        // do not trigger loading state according to the task description
+        try {
+            const tournament = await postTournament(newTournamentName)
+            dispatch(tournamentPostSuccess(tournament))
+        } catch (e) {
+            dispatch(tournamentPostFailure())
         }
     };
 }
